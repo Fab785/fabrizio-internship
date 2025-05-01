@@ -20,7 +20,7 @@ const ItemDetails = () => {
       // Simulate loading time
       const timeout = setTimeout(() => {
         setIsLoading(false);
-      }, 2000); // adjust this duration as needed
+      }, 2000); 
 
       return () => clearTimeout(timeout);
     }

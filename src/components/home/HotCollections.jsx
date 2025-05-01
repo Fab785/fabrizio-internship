@@ -37,7 +37,7 @@ const startHold = (direction) => {
       direction === "prev"
         ? slider.current.prev()
         : slider.current.next();
-    }, 200); // adjust speed here (lower = faster)
+    }, 200);
   }
 };
 
@@ -147,6 +147,15 @@ const stopHold = () => {
 };
 
 export default HotCollections;
+
+
+
+
+
+
+
+
+
 
 
 
