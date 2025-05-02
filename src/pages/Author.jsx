@@ -1,10 +1,32 @@
-import React from "react";
-import AuthorBanner from "../images/author_banner.jpg";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import AuthorItems from "../components/author/AuthorItems";
-import { Link } from "react-router-dom";
-import AuthorImage from "../images/author_thumbnail.jpg";
 
 const Author = () => {
+  const { authorId } = useParams();
+  const [author, setAuthor] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAuthor = async () => {
+      try {
+        const res = await fetch(
+          `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${authorId}`
+        );
+        const data = await res.json();
+        setAuthor(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch author:", err);
+      }
+    };
+
+    fetchAuthor();
+  }, [authorId]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!author) return <p>Author not found</p>;
+
   return (
     <div id="wrapper">
       <div className="no-bottom no-top" id="content">
@@ -12,10 +34,8 @@ const Author = () => {
 
         <section
           id="profile_banner"
-          aria-label="section"
           className="text-light"
-          data-bgimage="url(images/author_banner.jpg) top"
-          style={{ background: `url(${AuthorBanner}) top` }}
+          style={{ background: `url(${author.banner}) top` }}
         ></section>
 
         <section aria-label="section">
@@ -25,16 +45,13 @@ const Author = () => {
                 <div className="d_profile de-flex">
                   <div className="de-flex-col">
                     <div className="profile_avatar">
-                      <img src={AuthorImage} alt="" />
-
+                      <img src={author.authorImage} alt="" />
                       <i className="fa fa-check"></i>
                       <div className="profile_name">
                         <h4>
-                          Monica Lucas
-                          <span className="profile_username">@monicaaaa</span>
-                          <span id="wallet" className="profile_wallet">
-                            UDHUHWudhwd78wdt7edb32uidbwyuidhg7wUHIFUHWewiqdj87dy7
-                          </span>
+                          {author.name}
+                          <span className="profile_username">@{author.tag}</span>
+                          <span className="profile_wallet">{author.address}</span>
                           <button id="btn_copy" title="Copy Text">
                             Copy
                           </button>
@@ -44,10 +61,8 @@ const Author = () => {
                   </div>
                   <div className="profile_follow de-flex">
                     <div className="de-flex-col">
-                      <div className="profile_follower">573 followers</div>
-                      <Link to="#" className="btn-main">
-                        Follow
-                      </Link>
+                      <div className="profile_follower">{author.followers} followers</div>
+                      <button className="btn-main">Follow</button>
                     </div>
                   </div>
                 </div>
@@ -55,7 +70,7 @@ const Author = () => {
 
               <div className="col-md-12">
                 <div className="de_tab tab_simple">
-                  <AuthorItems />
+                  <AuthorItems authorId={authorId} />
                 </div>
               </div>
             </div>
@@ -67,3 +82,4 @@ const Author = () => {
 };
 
 export default Author;
+
