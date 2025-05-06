@@ -5,6 +5,8 @@ import Author from "./pages/Author";
 import ItemDetails from "./pages/ItemDetails";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import NFTList from "./components/dev/NFTList";
+import AuthorList from "./components/dev/AuthorList";
 
 function App() {
   return (
@@ -15,8 +17,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/explore" element={<Explore />} />
-            <Route path="/author/:authorId" element={<Author />} /> {/* Ensure you handle authorId in Author component */}
-            <Route path="/item-details/:itemId" element={<ItemDetails />} /> {/* Ensure you handle itemId in ItemDetails component */}
+            <Route path="/author/:authorId" element={<Author />} />
+            <Route path="/item-details/:itemId" element={<ItemDetails />} />
+            
+            {/* ✅ New routes */}
+            <Route path="/nft-list" element={<NFTList />} />
+            <Route path="/authors" element={<AuthorList />} />
           </Routes>
         </main>
         <Footer />

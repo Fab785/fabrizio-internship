@@ -31,36 +31,22 @@ const CountdownTimer = ({ expiryDate }) => {
 const NewItems = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const [sliderRef, slider] = useKeenSlider({
-    loop: true,
+  const [sliderRef, instanceRef] = useKeenSlider({
+    loop: true,  // Ensures infinite looping
+    mode: "free-snap",  // Optional: Free snapping mode for smooth transitions
     slides: {
-      perView: 4,
-      spacing: 15,
+      perView: 4,  // Number of slides visible at a time
+      spacing: 15,  // Space between slides
     },
     breakpoints: {
       "(max-width: 768px)": {
-        slides: { perView: 1, spacing: 10 },
+        slides: { perView: 1, spacing: 10 },  // Adjusts for smaller screens
       },
       "(min-width: 769px) and (max-width: 1024px)": {
-        slides: { perView: 2, spacing: 12 },
+        slides: { perView: 2, spacing: 12 },  // Adjusts for medium screens
       },
     },
   });
-
-  let holdInterval = null;
-
-  const startHold = (direction) => {
-    if (slider.current) {
-      holdInterval = setInterval(() => {
-        direction === "prev" ? slider.current.prev() : slider.current.next();
-      }, 200);
-    }
-  };
-
-  const stopHold = () => {
-    clearInterval(holdInterval);
-  };
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -80,6 +66,25 @@ const NewItems = () => {
     fetchItems();
   }, []);
 
+  // Handle the press and hold functionality for buttons
+  const handleMouseDown = (direction) => {
+    const interval = setInterval(() => {
+      if (direction === "prev") {
+        instanceRef.current?.prev();
+      } else if (direction === "next") {
+        instanceRef.current?.next();
+      }
+    }, 100); // Adjust time for faster/slower scrolling
+
+    // Clear interval when mouse is released or leaves the button
+    const handleMouseUpOrLeave = () => {
+      clearInterval(interval);
+    };
+
+    document.addEventListener("mouseup", handleMouseUpOrLeave);
+    document.addEventListener("mouseleave", handleMouseUpOrLeave);
+  };
+
   return (
     <section id="section-items" className="no-bottom">
       <div className="container">
@@ -91,25 +96,20 @@ const NewItems = () => {
         </div>
 
         {loading ? (
-          <div className="text-center">
-            <p>Loading...</p>
-          </div>
+          <div className="text-center">Loading...</div>
         ) : (
           <>
+            {/* Navigation buttons for the carousel */}
             <div className="d-flex justify-content-end mb-3 gap-2">
               <button
                 className="btn btn-outline-primary"
-                onMouseDown={() => startHold("prev")}
-                onMouseUp={stopHold}
-                onMouseLeave={stopHold}
+                onMouseDown={() => handleMouseDown("prev")}
               >
                 &#8592; Prev
               </button>
               <button
                 className="btn btn-outline-primary"
-                onMouseDown={() => startHold("next")}
-                onMouseUp={stopHold}
-                onMouseLeave={stopHold}
+                onMouseDown={() => handleMouseDown("next")}
               >
                 Next &#8594;
               </button>
@@ -154,7 +154,7 @@ const NewItems = () => {
                         <img
                           src={item.nftImage}
                           className="lazy nft__item_preview"
-                          alt=""
+                          alt={item.title}
                         />
                       </Link>
                     </div>
@@ -181,5 +181,7 @@ const NewItems = () => {
 };
 
 export default NewItems;
+
+
 
 
