@@ -63,24 +63,18 @@ const ExploreItems = () => {
 
   return (
     <section id="section-explore" className="pt-5">
-      <div className="container">
-        <div className="row mb-4">
-          <div className="col-lg-12 text-center">
-            <h2>Explore</h2>
-            <div className="small-border bg-color-2"></div>
-          </div>
-        </div>
+      <div className="container">       
+      <div className="row mb-4">
+  <div className="col-md-3">
+    <select className="form-select" onChange={handleFilterChange}>
+      <option value="">Default</option>
+      <option value="price_low_to_high">Price: Low to High</option>
+      <option value="price_high_to_low">Price: High to Low</option>
+      <option value="likes_high_to_low">Most Liked</option>
+    </select>
+  </div>
+</div>
 
-        <div className="row mb-4 justify-content-end">
-          <div className="col-md-3">
-            <select className="form-select" onChange={handleFilterChange}>
-              <option value="">Default</option>
-              <option value="price_low_to_high">Price: Low to High</option>
-              <option value="price_high_to_low">Price: High to Low</option>
-              <option value="likes_high_to_low">Most Liked</option>
-            </select>
-          </div>
-        </div>
 
         <div className="row">
           {loading ? (
