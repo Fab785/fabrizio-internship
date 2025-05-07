@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import SubHeader from "../images/subheader.jpg";
 import ExploreItems from "../components/explore/ExploreItems";
+import HeaderExplore from "../components/explore/HeaderExplore";
+import subheader from "../images/subheader.jpg";
 
 const Explore = () => {
   useEffect(() => {
@@ -15,7 +16,10 @@ const Explore = () => {
         <section
           id="subheader"
           className="text-light"
-          style={{ background: `url("${SubHeader}") top` }}
+          style={{
+            background: `url(${subheader}) no-repeat top center`,
+            backgroundSize: "cover",
+          }}
         >
           <div className="center-y relative text-center">
             <div className="container">
@@ -23,7 +27,6 @@ const Explore = () => {
                 <div className="col-md-12 text-center">
                   <h1>Explore</h1>
                 </div>
-                <div className="clearfix"></div>
               </div>
             </div>
           </div>
@@ -32,6 +35,7 @@ const Explore = () => {
         <section aria-label="section">
           <div className="container">
             <div className="row">
+              <HeaderExplore />
               <ExploreItems />
             </div>
           </div>
@@ -42,3 +46,4 @@ const Explore = () => {
 };
 
 export default Explore;
+
