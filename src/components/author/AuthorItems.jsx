@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const AuthorItems = ({ items, authorImage }) => {
   return (
@@ -14,11 +15,13 @@ const AuthorItems = ({ items, authorImage }) => {
             </div>
 
             <div className="nft__item_wrap">
-              <img
-                src={item.nftImage}
-                className="lazy nft__item_preview"
-                alt={item.title}
-              />
+              <Link to={`/item-details/${item.id}`}>
+                <img
+                  src={item.nftImage}
+                  className="lazy nft__item_preview"
+                  alt={item.title}
+                />
+              </Link>
             </div>
 
             <div className="nft__item_info">
@@ -37,4 +40,5 @@ const AuthorItems = ({ items, authorImage }) => {
 };
 
 export default AuthorItems;
+
 

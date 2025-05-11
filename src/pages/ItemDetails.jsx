@@ -117,8 +117,3 @@ export default ItemDetails;
 
 
 
-
-
-
-
-
