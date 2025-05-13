@@ -1,39 +1,99 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import AuthorImage from "../../images/author_thumbnail.jpg";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Add this import
 
 const TopSellers = () => {
+  const [sellers, setSellers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTopSellers = async () => {
+      try {
+        const res = await fetch(
+          "https://us-central1-nft-cloud-functions.cloudfunctions.net/topSellers"
+        );
+        const data = await res.json();
+        setSellers(data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch top sellers:", err);
+      }
+    };
+
+    fetchTopSellers();
+  }, []);
+
+  const numColumns = 4;
+  const numRows = 3;
+  const columns = Array.from({ length: numColumns }, (_, colIndex) =>
+    Array.from({ length: numRows }, (_, rowIndex) => {
+      const index = rowIndex + colIndex * numRows;
+      return sellers[index] ? { ...sellers[index], rank: index + 1 } : null;
+    }).filter(Boolean)
+  );
+
   return (
-    <section id="section-popular" className="pb-5">
+    <section id="section-popular">
       <div className="container">
         <div className="row">
-          <div className="col-lg-12">
-            <div className="text-center">
-              <h2>Top Sellers</h2>
-              <div className="small-border bg-color-2"></div>
-            </div>
+          <div className="col-lg-12 text-center mb-4">
+            <h2>Top Sellers</h2>
+            <div className="small-border"></div>
           </div>
-          <div className="col-md-12">
-            <ol className="author_list">
-              {new Array(12).fill(0).map((_, index) => (
-                <li key={index}>
-                  <div className="author_list_pp">
-                    <Link to="/author">
-                      <img
-                        className="lazy pp-author"
-                        src={AuthorImage}
-                        alt=""
-                      />
-                      <i className="fa fa-check"></i>
-                    </Link>
-                  </div>
-                  <div className="author_list_info">
-                    <Link to="/author">Monica Lucas</Link>
-                    <span>2.1 ETH</span>
-                  </div>
-                </li>
-              ))}
-            </ol>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}
+          >
+            {columns.map((col, colIndex) => (
+              <div
+                key={colIndex}
+                style={{
+                  width: "23%",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
+                {col.map((seller) => (
+                  <Link
+                    to={`/author/${seller.authorId}`}
+                    key={seller.rank}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    <span style={{ fontWeight: "bold", minWidth: "20px" }}>
+                      {seller.rank}.
+                    </span>
+                    <img
+                      src={seller.authorImage}
+                      alt={seller.authorName}
+                      style={{
+                        width: "50px",
+                        height: "50px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <div>
+                      <div style={{ fontWeight: "600" }}>
+                        {seller.authorName}
+                      </div>
+                      <div style={{ fontSize: "0.9em", color: "#777" }}>
+                        {seller.price} ETH
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -42,3 +102,7 @@ const TopSellers = () => {
 };
 
 export default TopSellers;
+
+
+
+
