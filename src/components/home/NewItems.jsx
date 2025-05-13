@@ -95,26 +95,54 @@ const NewItems = () => {
             <p>Loading...</p>
           </div>
         ) : (
-          <>
-            <div className="d-flex justify-content-end mb-3 gap-2">
-              <button
-                className="btn btn-outline-primary"
-                onMouseDown={() => startHold("prev")}
-                onMouseUp={stopHold}
-                onMouseLeave={stopHold}
-              >
-                &#8592; Prev
-              </button>
-              <button
-                className="btn btn-outline-primary"
-                onMouseDown={() => startHold("next")}
-                onMouseUp={stopHold}
-                onMouseLeave={stopHold}
-              >
-                Next &#8594;
-              </button>
-            </div>
+          <div style={{ position: "relative" }}>
+            {/* Left Arrow */}
+            <button
+              onMouseDown={() => startHold("prev")}
+              onMouseUp={stopHold}
+              onMouseLeave={stopHold}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "-20px",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                border: "none",
+                padding: "10px",
+                borderRadius: "50%",
+                cursor: "pointer",
+                fontSize: "18px",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+              }}
+            >
+              &#60;
+            </button>
 
+            {/* Right Arrow */}
+            <button
+              onMouseDown={() => startHold("next")}
+              onMouseUp={stopHold}
+              onMouseLeave={stopHold}
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "-20px",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                border: "none",
+                padding: "10px",
+                borderRadius: "50%",
+                cursor: "pointer",
+                fontSize: "18px",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+              }}
+            >
+              &#62;
+            </button>
+
+            {/* Slider */}
             <div ref={sliderRef} className="keen-slider">
               {items.map((item) => (
                 <div
@@ -150,7 +178,10 @@ const NewItems = () => {
                           </div>
                         </div>
                       </div>
-                      <Link to={`/item-details/${item.nftId}`} state={{ collection: item }}>
+                      <Link
+                        to={`/item-details/${item.nftId}`}
+                        state={{ collection: item }}
+                      >
                         <img
                           src={item.nftImage}
                           className="lazy nft__item_preview"
@@ -160,7 +191,10 @@ const NewItems = () => {
                     </div>
 
                     <div className="nft__item_info">
-                      <Link to={`/item-details/${item.nftId}`} state={{ collection: item }}>
+                      <Link
+                        to={`/item-details/${item.nftId}`}
+                        state={{ collection: item }}
+                      >
                         <h4>{item.title}</h4>
                       </Link>
                       <div className="nft__item_price">{item.price} ETH</div>
@@ -173,7 +207,7 @@ const NewItems = () => {
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </section>
@@ -181,4 +215,5 @@ const NewItems = () => {
 };
 
 export default NewItems;
+
 

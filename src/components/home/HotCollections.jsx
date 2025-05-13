@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useKeenSlider } from "keen-slider/react";
+import { Link } from "react-router-dom";
 import "keen-slider/keen-slider.min.css";
 
 const HotCollections = () => {
@@ -10,41 +10,32 @@ const HotCollections = () => {
   const [sliderRef, slider] = useKeenSlider({
     loop: true,
     slides: {
-      perView: 3,
+      perView: 4,
       spacing: 15,
     },
     breakpoints: {
       "(max-width: 768px)": {
-        slides: {
-          perView: 1,
-          spacing: 10,
-        },
+        slides: { perView: 1, spacing: 10 },
       },
       "(min-width: 769px) and (max-width: 1024px)": {
-        slides: {
-          perView: 2,
-          spacing: 12,
-        },
+        slides: { perView: 2, spacing: 12 },
       },
     },
   });
 
   let holdInterval = null;
 
-const startHold = (direction) => {
-  if (slider.current) {
-    holdInterval = setInterval(() => {
-      direction === "prev"
-        ? slider.current.prev()
-        : slider.current.next();
-    }, 200);
-  }
-};
+  const startHold = (direction) => {
+    if (slider.current) {
+      holdInterval = setInterval(() => {
+        direction === "prev" ? slider.current.prev() : slider.current.next();
+      }, 200);
+    }
+  };
 
-const stopHold = () => {
-  clearInterval(holdInterval);
-};
-
+  const stopHold = () => {
+    clearInterval(holdInterval);
+  };
 
   useEffect(() => {
     const fetchCollections = async () => {
@@ -55,8 +46,8 @@ const stopHold = () => {
         const data = await res.json();
         setCollections(data);
         setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch collections:", error);
+      } catch (err) {
+        console.error("Failed to fetch hot collections:", err);
         setLoading(false);
       }
     };
@@ -79,67 +70,88 @@ const stopHold = () => {
             <p>Loading...</p>
           </div>
         ) : (
-          <>
-            <div className="d-flex justify-content-end mb-3 gap-2">
+          <div style={{ position: "relative" }}>
+            {/* Left Arrow */}
             <button
-             className="btn btn-outline-primary"
-             onMouseDown={() => startHold("prev")}
-             onMouseUp={stopHold}
-             onMouseLeave={stopHold}
->
-             &#8592; Prev
+              onMouseDown={() => startHold("prev")}
+              onMouseUp={stopHold}
+              onMouseLeave={stopHold}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "-20px",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                border: "none",
+                padding: "10px",
+                borderRadius: "50%",
+                cursor: "pointer",
+                fontSize: "18px",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+              }}
+            >
+              &#60;
             </button>
 
+            {/* Right Arrow */}
             <button
-             className="btn btn-outline-primary"
-             onMouseDown={() => startHold("next")}
-             onMouseUp={stopHold}
-             onMouseLeave={stopHold}
->
-             Next &#8594;
-           </button>
+              onMouseDown={() => startHold("next")}
+              onMouseUp={stopHold}
+              onMouseLeave={stopHold}
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "-20px",
+                transform: "translateY(-50%)",
+                zIndex: 10,
+                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                border: "none",
+                padding: "10px",
+                borderRadius: "50%",
+                cursor: "pointer",
+                fontSize: "18px",
+                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+              }}
+            >
+              &#62;
+            </button>
 
-            </div>
-
+            {/* Slider */}
             <div ref={sliderRef} className="keen-slider">
-              {collections.map((collection) => (
-                <div
-                  key={collection.id}
-                  className="keen-slider__slide"
-                  style={{ padding: "0 10px" }}
-                >
+              {collections.map((collection, index) => (
+                <div key={index} className="keen-slider__slide">
                   <div className="nft_coll">
                     <div className="nft_wrap">
-                    <Link to={`/item-details/${collection.nftId}`} state={{ collection }}>
-                     <img
-                       src={collection.nftImage}
-                       className="lazy img-fluid"
-                       alt={collection.title}
-                     />
-                   </Link>
-
+                      <Link to={`/item-details/${collection.nftId}`}>
+                        <img
+                          src={collection.nftImage}
+                          className="lazy img-fluid"
+                          alt=""
+                        />
+                      </Link>
                     </div>
                     <div className="nft_coll_pp">
                       <Link to={`/author/${collection.authorId}`}>
                         <img
                           className="lazy pp-coll"
                           src={collection.authorImage}
-                          alt="Author"
+                          alt=""
                         />
                       </Link>
                       <i className="fa fa-check"></i>
                     </div>
                     <div className="nft_coll_info">
-                      <Link to="/explore">
+                      <Link to={`/item-details/${collection.nftId}`}>
                         <h4>{collection.title}</h4>
                       </Link>
-                      <span>ERC-{collection.code}</span>
+                      <span>{collection.authorName}</span>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </section>
