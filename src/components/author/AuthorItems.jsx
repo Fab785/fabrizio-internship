@@ -5,17 +5,56 @@ const AuthorItems = ({ items, authorImage }) => {
   return (
     <div className="row">
       {items.map((item) => (
-        <div key={item.id} className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div key={item.nftId} className="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div className="nft__item">
             <div className="author_list_pp">
-              <span>
-                <img className="lazy" src={authorImage} alt="author" />
-                <i className="fa fa-check"></i>
-              </span>
+              <Link to={`/author/${item.authorId}`}>
+                <div
+                  style={{
+                    position: "relative",
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    transition: "all 0.3s ease",
+                  }}
+                  className="author-hover-wrapper"
+                >
+                  <img
+                    src={authorImage}
+                    alt="author"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "50%",
+                      border: "2px solid transparent",
+                      transition: "border 0.3s ease",
+                    }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.border = "2px solid #8364e2")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.border = "2px solid transparent")
+                    }
+                  />
+                  <i
+                    className="fa fa-check"
+                    style={{
+                      position: "absolute",
+                      bottom: "0",
+                      right: "0",
+                      background: "#fff",
+                      borderRadius: "50%",
+                      padding: "2px",
+                      fontSize: "10px",
+                    }}
+                  ></i>
+                </div>
+              </Link>
             </div>
 
             <div className="nft__item_wrap">
-              <Link to={`/item-details/${item.id}`}>
+              <Link to={`/item-details/${item.nftId}`}>
                 <img
                   src={item.nftImage}
                   className="lazy nft__item_preview"
@@ -40,5 +79,6 @@ const AuthorItems = ({ items, authorImage }) => {
 };
 
 export default AuthorItems;
+
 
 

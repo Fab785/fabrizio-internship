@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Add this import
+import { Link } from "react-router-dom";
 
 const TopSellers = () => {
   const [sellers, setSellers] = useState([]);
@@ -72,16 +72,37 @@ const TopSellers = () => {
                     <span style={{ fontWeight: "bold", minWidth: "20px" }}>
                       {seller.rank}.
                     </span>
-                    <img
-                      src={seller.authorImage}
-                      alt={seller.authorName}
+                    <div
                       style={{
+                        position: "relative",
                         width: "50px",
                         height: "50px",
                         borderRadius: "50%",
-                        objectFit: "cover",
+                        overflow: "hidden",
+                        transition: "all 0.3s ease",
                       }}
-                    />
+                      onMouseEnter={(e) => {
+                        e.currentTarget.firstChild.style.border =
+                          "2px solid #8364e2";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.firstChild.style.border =
+                          "2px solid transparent";
+                      }}
+                    >
+                      <img
+                        src={seller.authorImage}
+                        alt={seller.authorName}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "50%",
+                          border: "2px solid transparent",
+                          transition: "border 0.3s ease",
+                        }}
+                      />
+                    </div>
                     <div>
                       <div style={{ fontWeight: "600" }}>
                         {seller.authorName}
@@ -102,6 +123,7 @@ const TopSellers = () => {
 };
 
 export default TopSellers;
+
 
 
 
