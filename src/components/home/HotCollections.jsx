@@ -37,6 +37,33 @@ const HotCollections = () => {
     clearInterval(holdInterval);
   };
 
+  const [isHoveringLeft, setIsHoveringLeft] = useState(false);
+  const [isHoveringRight, setIsHoveringRight] = useState(false);
+
+  const baseArrowStyle = {
+    position: "absolute",
+    top: "50%",
+    transform: "translateY(-50%)",
+    zIndex: 10,
+    backgroundColor: "#fff",
+    border: "2px solid #d1d5db",
+    color: "#111827",
+    width: "48px",
+    height: "48px",
+    borderRadius: "50%",
+    cursor: "pointer",
+    fontSize: "22px",
+    transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const hoverStyle = {
+    transform: "translateY(-50%) scale(1.15)",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
+  };
+
   useEffect(() => {
     const fetchCollections = async () => {
       try {
@@ -73,22 +100,18 @@ const HotCollections = () => {
           <div style={{ position: "relative" }}>
             {/* Left Arrow */}
             <button
+              onClick={() => slider.current?.prev()}
               onMouseDown={() => startHold("prev")}
               onMouseUp={stopHold}
-              onMouseLeave={stopHold}
+              onMouseLeave={() => {
+                stopHold();
+                setIsHoveringLeft(false);
+              }}
+              onMouseEnter={() => setIsHoveringLeft(true)}
               style={{
-                position: "absolute",
-                top: "50%",
-                left: "-20px",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                border: "none",
-                padding: "10px",
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: "18px",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                ...baseArrowStyle,
+                left: "-25px",
+                ...(isHoveringLeft ? hoverStyle : {}),
               }}
             >
               &#60;
@@ -96,22 +119,18 @@ const HotCollections = () => {
 
             {/* Right Arrow */}
             <button
+              onClick={() => slider.current?.next()}
               onMouseDown={() => startHold("next")}
               onMouseUp={stopHold}
-              onMouseLeave={stopHold}
+              onMouseLeave={() => {
+                stopHold();
+                setIsHoveringRight(false);
+              }}
+              onMouseEnter={() => setIsHoveringRight(true)}
               style={{
-                position: "absolute",
-                top: "50%",
-                right: "-20px",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                border: "none",
-                padding: "10px",
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: "18px",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+                ...baseArrowStyle,
+                right: "-25px",
+                ...(isHoveringRight ? hoverStyle : {}),
               }}
             >
               &#62;

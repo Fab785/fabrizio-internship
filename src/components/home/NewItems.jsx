@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -31,6 +31,10 @@ const CountdownTimer = ({ expiryDate }) => {
 const NewItems = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isHoveringLeft, setIsHoveringLeft] = useState(false);
+  const [isHoveringRight, setIsHoveringRight] = useState(false);
+  const [isPressingLeft, setIsPressingLeft] = useState(false);
+  const [isPressingRight, setIsPressingRight] = useState(false);
 
   const [sliderRef, slider] = useKeenSlider({
     loop: true,
@@ -48,19 +52,8 @@ const NewItems = () => {
     },
   });
 
-  let holdInterval = null;
-
-  const startHold = (direction) => {
-    if (slider.current) {
-      holdInterval = setInterval(() => {
-        direction === "prev" ? slider.current.prev() : slider.current.next();
-      }, 200);
-    }
-  };
-
-  const stopHold = () => {
-    clearInterval(holdInterval);
-  };
+  const leftIntervalRef = useRef(null);
+  const rightIntervalRef = useRef(null);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -80,6 +73,82 @@ const NewItems = () => {
     fetchItems();
   }, []);
 
+  // Clear intervals on unmount
+  useEffect(() => {
+    return () => {
+      clearInterval(leftIntervalRef.current);
+      clearInterval(rightIntervalRef.current);
+    };
+  }, []);
+
+  const startLeftScroll = () => {
+    if (leftIntervalRef.current) return; // already scrolling
+    leftIntervalRef.current = setInterval(() => {
+      slider.current?.prev();
+    }, 150);
+  };
+
+  const stopLeftScroll = () => {
+    clearInterval(leftIntervalRef.current);
+    leftIntervalRef.current = null;
+  };
+
+  const startRightScroll = () => {
+    if (rightIntervalRef.current) return; // already scrolling
+    rightIntervalRef.current = setInterval(() => {
+      slider.current?.next();
+    }, 150);
+  };
+
+  const stopRightScroll = () => {
+    clearInterval(rightIntervalRef.current);
+    rightIntervalRef.current = null;
+  };
+
+  const leftButtonStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "-5px",
+    transform: `translateY(-50%) scale(${
+      isPressingLeft ? 0.9 : isHoveringLeft ? 1.15 : 1
+    })`,
+    zIndex: 10,
+    backgroundColor: "white",
+    border: "2px solid #d1d5db",
+    width: "48px",
+    height: "48px",
+    borderRadius: "50%",
+    cursor: "pointer",
+    fontSize: "20px",
+    boxShadow: isHoveringLeft
+      ? "0 6px 18px rgba(0, 0, 0, 0.3)"
+      : "0 4px 12px rgba(0, 0, 0, 0.15)",
+    transition: "transform 0.15s ease, box-shadow 0.15s ease",
+    userSelect: "none",
+  };
+
+  const rightButtonStyle = {
+    position: "absolute",
+    top: "50%",
+    right: "-5px",
+    transform: `translateY(-50%) scale(${
+      isPressingRight ? 0.9 : isHoveringRight ? 1.15 : 1
+    })`,
+    zIndex: 10,
+    backgroundColor: "white",
+    border: "2px solid #d1d5db",
+    width: "48px",
+    height: "48px",
+    borderRadius: "50%",
+    cursor: "pointer",
+    fontSize: "20px",
+    boxShadow: isHoveringRight
+      ? "0 6px 18px rgba(0, 0, 0, 0.3)"
+      : "0 4px 12px rgba(0, 0, 0, 0.15)",
+    transition: "transform 0.15s ease, box-shadow 0.15s ease",
+    userSelect: "none",
+  };
+
   return (
     <section id="section-items" className="no-bottom">
       <div className="container">
@@ -98,46 +167,48 @@ const NewItems = () => {
           <div style={{ position: "relative" }}>
             {/* Left Arrow */}
             <button
-              onMouseDown={() => startHold("prev")}
-              onMouseUp={stopHold}
-              onMouseLeave={stopHold}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "-20px",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                border: "none",
-                padding: "10px",
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: "18px",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+              onClick={() => slider.current?.prev()}
+              onMouseDown={() => {
+                setIsPressingLeft(true);
+                startLeftScroll();
               }}
+              onMouseUp={() => {
+                setIsPressingLeft(false);
+                stopLeftScroll();
+              }}
+              onMouseLeave={() => {
+                setIsPressingLeft(false);
+                stopLeftScroll();
+                setIsHoveringLeft(false);
+              }}
+              onMouseEnter={() => setIsHoveringLeft(true)}
+              onMouseOut={() => setIsHoveringLeft(false)}
+              style={leftButtonStyle}
+              aria-label="Previous slide"
             >
               &#60;
             </button>
 
             {/* Right Arrow */}
             <button
-              onMouseDown={() => startHold("next")}
-              onMouseUp={stopHold}
-              onMouseLeave={stopHold}
-              style={{
-                position: "absolute",
-                top: "50%",
-                right: "-20px",
-                transform: "translateY(-50%)",
-                zIndex: 10,
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
-                border: "none",
-                padding: "10px",
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: "18px",
-                boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+              onClick={() => slider.current?.next()}
+              onMouseDown={() => {
+                setIsPressingRight(true);
+                startRightScroll();
               }}
+              onMouseUp={() => {
+                setIsPressingRight(false);
+                stopRightScroll();
+              }}
+              onMouseLeave={() => {
+                setIsPressingRight(false);
+                stopRightScroll();
+                setIsHoveringRight(false);
+              }}
+              onMouseEnter={() => setIsHoveringRight(true)}
+              onMouseOut={() => setIsHoveringRight(false)}
+              style={rightButtonStyle}
+              aria-label="Next slide"
             >
               &#62;
             </button>
@@ -215,5 +286,3 @@ const NewItems = () => {
 };
 
 export default NewItems;
-
-
