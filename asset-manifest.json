@@ -1,8 +1,7 @@
 {
   "files": {
-    "main.css": "/fabrizio-internship/static/css/main.37f6e2f7.css",
-    "main.js": "/fabrizio-internship/static/js/main.1b918121.js",
-    "static/js/787.0979ab29.chunk.js": "/fabrizio-internship/static/js/787.0979ab29.chunk.js",
+    "main.css": "/fabrizio-internship/static/css/main.f5fc8a52.css",
+    "main.js": "/fabrizio-internship/static/js/main.1cfcb1f9.js",
     "static/media/icofont.woff": "/fabrizio-internship/static/media/icofont.dad3accba068281878f1.woff",
     "static/media/icofont.woff2": "/fabrizio-internship/static/media/icofont.9c33516aab48c61e3081.woff2",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/fabrizio-internship/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
@@ -24,12 +23,11 @@
     "static/media/bg-shape-1.jpg": "/fabrizio-internship/static/media/bg-shape-1.ba54a8e086d0e99d912d.jpg",
     "index.html": "/fabrizio-internship/index.html",
     "static/media/ethereum.svg": "/fabrizio-internship/static/media/ethereum.df265e367364f285053a1285ad8d418d.svg",
-    "main.37f6e2f7.css.map": "/fabrizio-internship/static/css/main.37f6e2f7.css.map",
-    "main.1b918121.js.map": "/fabrizio-internship/static/js/main.1b918121.js.map",
-    "787.0979ab29.chunk.js.map": "/fabrizio-internship/static/js/787.0979ab29.chunk.js.map"
+    "main.f5fc8a52.css.map": "/fabrizio-internship/static/css/main.f5fc8a52.css.map",
+    "main.1cfcb1f9.js.map": "/fabrizio-internship/static/js/main.1cfcb1f9.js.map"
   },
   "entrypoints": [
-    "static/css/main.37f6e2f7.css",
-    "static/js/main.1b918121.js"
+    "static/css/main.f5fc8a52.css",
+    "static/js/main.1cfcb1f9.js"
   ]
 }
